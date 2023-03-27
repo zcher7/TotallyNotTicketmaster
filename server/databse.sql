@@ -15,3 +15,26 @@ CREATE TABLE users(
     email VARCHAR(50) UNIQUE,
     birthday DATE
 );
+
+CREATE TABLE checkout(
+    checkoutID SERIAL PRIMARY KEY,
+    userID INTEGER,
+    ticketID INTEGER NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    FOREIGN KEY (ticketID) REFERENCES tickets(ticketID)
+);  
+
+SELECT AVG(*)
+FROM SELECT COUNT(*)
+    FROM checkout
+    GROUP BY checkout.userID
+
+
+With userTickets AS
+SELECT checkout.userID, COUNT(*) AS ticketsPurchased
+FROM checkout 
+GROUP BY checkout.userID
+HAVING 2 <= COUNT(*)
+
+SELECT AVG(ticketsPurchased)
+FROM userTickets
