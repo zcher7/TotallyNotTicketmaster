@@ -12,6 +12,7 @@ app.use(express.json());
 app.post("/tickets", async(req, res) => {
     try {
         const {ticketid, price, available, artist, date} = req.body;
+        console.log(date);
         const newTicket = await pool.query("INSERT INTO tickets (ticketid, price, available, artist, date)" +
                                             " VALUES($1, $2, $3, $4, $5) RETURNING *",
          [ticketid, price, available, artist, date]);
@@ -101,6 +102,17 @@ app.get("/tickets/projection/:input", async (req, res) => {
     }
 })
 
+// PROJECTION - Show specific columns in users
+app.get("/users/projection/:input", async (req, res) => {
+    try {
+        const param = req.params;
+        const users = await pool.query("SELECT " + Object.values(param) + " FROM users");
+        res.json(users.rows);
+    } catch (err) {
+        console.error(err.message)
+    }
+})
+
 // JOIN
 app.get("/tickets/join/:artist", async (req, res) => {
     try {
@@ -138,6 +150,17 @@ app.get("/having", async (req, res) => {
 app.get("/nested", async (req, res) => {
     try {
         const tickets = await pool.query("With userTickets AS (SELECT checkout.userID, COUNT(*) AS ticketsPurchased FROM checkout GROUP BY checkout.userID HAVING 2 <= COUNT(*)) SELECT AVG(ticketsPurchased) FROM userTickets");
+       
+        res.json(tickets.rows);
+    } catch (err) {
+        console.error(err.message)
+    }
+})
+
+// DIVISION
+app.get("/division", async (req, res) => {
+    try {
+        const tickets = await pool.query("SELECT U.firstName, U.lastName FROM users U WHERE NOT EXISTS ((SELECT DISTINCT artist FROM tickets) EXCEPT (SELECT T1.artist FROM tickets T1, checkout C1 WHERE T1.ticketID = C1.ticketID AND C1.userID = U.userID))");
        
         res.json(tickets.rows);
     } catch (err) {
