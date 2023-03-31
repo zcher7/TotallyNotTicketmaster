@@ -25,10 +25,10 @@ app.post("/tickets", async(req, res) => {
 
 app.post("/users", async(req, res) => {
     try {
-        const {userid, firstName, lastName, email, birthday} = req.body;
-        const newUser = await pool.query("INSERT INTO users (userid, firstName, lastName, email, birthday)" +
+        const {userid, firstname, lastname, email, birthday} = req.body;
+        const newUser = await pool.query("INSERT INTO users (userid, firstname, lastname, email, birthday)" +
                                             " VALUES($1, $2, $3, $4, $5) RETURNING *",
-         [userid, firstName, lastName, email, birthday]);
+         [userid, firstname, lastname, email, birthday]);
 
          res.json(newUser.rows[0]);
     } catch (error) {
@@ -117,7 +117,7 @@ app.get("/users/projection/:input", async (req, res) => {
 app.get("/tickets/join/:artist", async (req, res) => {
     try {
         const {artist} = req.params;
-        const tickets = await pool.query("SELECT tickets.ticketID, users.firstName, users.lastName FROM tickets INNER JOIN checkout ON tickets.ticketID = checkout.ticketID INNER JOIN users ON checkout.userID = users.userID WHERE artist = $1", [artist]);
+        const tickets = await pool.query("SELECT users.userID, tickets.ticketID, users.firstname, users.lastname FROM tickets INNER JOIN checkout ON tickets.ticketID = checkout.ticketID INNER JOIN users ON checkout.userID = users.userID WHERE artist = $1", [artist]);
         res.json(tickets.rows);
     } catch (err) {
         console.error(err.message)
@@ -160,7 +160,7 @@ app.get("/nested", async (req, res) => {
 // DIVISION
 app.get("/division", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT U.firstName, U.lastName FROM users U WHERE NOT EXISTS ((SELECT DISTINCT artist FROM tickets) EXCEPT (SELECT T1.artist FROM tickets T1, checkout C1 WHERE T1.ticketID = C1.ticketID AND C1.userID = U.userID))");
+        const tickets = await pool.query("SELECT U.firstname, U.lastname FROM users U WHERE NOT EXISTS ((SELECT DISTINCT artist FROM tickets) EXCEPT (SELECT T1.artist FROM tickets T1, checkout C1 WHERE T1.ticketID = C1.ticketID AND C1.userID = U.userID))");
        
         res.json(tickets.rows);
     } catch (err) {
