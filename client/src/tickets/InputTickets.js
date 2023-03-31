@@ -11,8 +11,6 @@ const InputTickets = () => {
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
-            console.log(ticketid);
-            console.log(artist);
             const body = {ticketid, price, available, artist, date}
             console.log(JSON.stringify(body))
             await fetch("http://localhost:5000/tickets", {
