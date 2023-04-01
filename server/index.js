@@ -54,11 +54,11 @@ app.get("/users", async (req, res) => {
     }
 })
 
-// SELECT - Only show tickets for specific artist
-app.get("/tickets/:artist", async (req, res) => {
+// SELECT - Only show users of specific first name
+app.get("/select/:firstname", async (req, res) => {
     try {
-        const {artist} = req.params;
-        const tickets = await pool.query("SELECT * FROM tickets WHERE artist = $1", [artist]);
+        const {firstname} = req.params;
+        const tickets = await pool.query("SELECT * FROM users WHERE firstname = $1", [firstname]);
 
         res.json(tickets.rows);
     } catch (err) {
@@ -91,22 +91,12 @@ app.delete("/tickets/:id", async (req, res) => {
     }
 })
 
-// PROJECTION - Show specific columns in tickets
-app.get("/tickets/projection/:input", async (req, res) => {
+// PROJECTION - Show specific columns in given table
+app.get("/projection/:input/:table", async (req, res) => {
     try {
-        const param = req.params;
-        const tickets = await pool.query("SELECT " + Object.values(param) + " FROM tickets");
-        res.json(tickets.rows);
-    } catch (err) {
-        console.error(err.message)
-    }
-})
-
-// PROJECTION - Show specific columns in users
-app.get("/users/projection/:input", async (req, res) => {
-    try {
-        const param = req.params;
-        const users = await pool.query("SELECT " + Object.values(param) + " FROM users");
+        const input = req.params.input;
+        const table = req.params.table;
+        const users = await pool.query("SELECT " + input + " FROM " + table);
         res.json(users.rows);
     } catch (err) {
         console.error(err.message)
@@ -138,7 +128,7 @@ app.get("/group", async (req, res) => {
 // HAVING
 app.get("/having", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT available, AVG(price) FROM tickets GROUP BY available HAVING 80 >= AVG(price)");
+        const tickets = await pool.query("SELECT available, AVG(price) FROM tickets GROUP BY available HAVING 100 <= AVG(price)");
        
         res.json(tickets.rows);
     } catch (err) {

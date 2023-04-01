@@ -1,3 +1,4 @@
+import Selection from "./Selection";
 import Join from "./Join";
 import Group from "./Group";
 import Having from "./Having";
@@ -6,11 +7,12 @@ import Division from "./Division";
 
 const Queries = () => {
     return <div>
+    <Selection />
     <Join />
-    {/* <Group />
+    <Group />
     <Having />
     <Nested />
-    <Division /> */}
+    <Division />
     </div>
   }
 

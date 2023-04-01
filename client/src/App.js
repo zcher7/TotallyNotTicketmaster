@@ -8,6 +8,7 @@ import Tickets from "./tickets/Tickets";
 import Users from "./users/Users";
 import Home from "./home/Home";
 import Queries from "./queries/Queries";
+import Viewer from "./viewer/Viewer";
 
 function App() {
   let component;
@@ -23,6 +24,9 @@ function App() {
       break;
     case "/queries":
       component = <Queries />;
+      break;
+    case "/viewer":
+      component = <Viewer />;
       break;
   }
   return <Fragment>

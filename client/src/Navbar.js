@@ -1,6 +1,6 @@
 export default function Navbar() {
     return <nav className="nav">
-        <a href="/" className="site-title">TNT</a>
+        <a href="/" className="site-title">Totally Not Ticketmaster</a>
         <ul>
             <li>
                 <a href="/tickets">Tickets</a>
@@ -10,6 +10,9 @@ export default function Navbar() {
             </li>
             <li>
                 <a href="/queries">Queries</a>
+            </li>
+            <li>
+                <a href="/viewer">Viewer</a>
             </li>
         </ul>
     </nav>

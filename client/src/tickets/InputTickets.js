@@ -32,8 +32,7 @@ const InputTickets = () => {
 
     return (
         <Fragment>
-            <h1 className="text-center mt-5">Totally Not Ticketmaster</h1>
-            <h2 className="text-center mt-5">Add Ticket</h2>
+            <h1 className="text-center mt-5">Add Ticket</h1>
             <form onSubmit={onSubmitForm}>
                 <input type="number" className="form-control mt-3" placeholder="Enter TicketID" value={ticketid} onChange={e =>
                 setTicketid(e.target.value)}/>

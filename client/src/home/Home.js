@@ -1,3 +1,5 @@
+import ticketmaster from "./ticketmaster.png";
+
 export default function Home() {
-    return <h1>Home</h1>
+    return <img src={ticketmaster} alt="ticketmaster" />
 }
