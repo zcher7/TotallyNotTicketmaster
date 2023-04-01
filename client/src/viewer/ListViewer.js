@@ -10,7 +10,6 @@ const ListViewer = () => {
     const getViewer = async e => {
         e.preventDefault();
         setColumns(input.split(","));
-        console.log(columns)
         try {
 
             const response = await fetch(`http://localhost:5000/projection/${input}/${table}`)
@@ -27,9 +26,9 @@ const ListViewer = () => {
         <h3 className="mt-2 text-center">Currently Viewing: {table}</h3>
         
         <form onSubmit={getViewer} className="d-flex">
-                <input type="text" className="form-control mt-5" placeholder="Enter Columns" value={input} onChange={e =>
+                <input type="text" className="form-control mt-5" placeholder="Enter Columns (e.g. userid,firstname,email)" value={input} onChange={e =>
                 setInput(e.target.value)}/>
-                <input type="text" className="form-control mt-5" placeholder="Enter Table" value={table} onChange={e =>
+                <input type="text" className="form-control mt-5" placeholder="Enter Table (e.g. users)" value={table} onChange={e =>
                 setTable(e.target.value)}/>
                 <button className="btn btn-dark mt-5" >View Table</button>
                 

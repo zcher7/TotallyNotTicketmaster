@@ -11,11 +11,11 @@ app.use(express.json());
 
 app.post("/tickets", async(req, res) => {
     try {
-        const {ticketid, price, available, artist, date} = req.body;
+        const {ticketid, price, type, artist, date} = req.body;
         console.log(date);
-        const newTicket = await pool.query("INSERT INTO tickets (ticketid, price, available, artist, date)" +
+        const newTicket = await pool.query("INSERT INTO tickets (ticketid, price, type, artist, date)" +
                                             " VALUES($1, $2, $3, $4, $5) RETURNING *",
-         [ticketid, price, available, artist, date]);
+         [ticketid, price, type, artist, date]);
 
          res.json(newTicket.rows[0]);
     } catch (error) {
@@ -31,6 +31,19 @@ app.post("/users", async(req, res) => {
          [userid, firstname, lastname, email, birthday]);
 
          res.json(newUser.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+})
+
+app.post("/purchases", async(req, res) => {
+    try {
+        const {purchaseid, userid, ticketid} = req.body;
+        const newPurchase = await pool.query("INSERT INTO purchases (purchaseid, userid, ticketid)" +
+                                            " VALUES($1, $2, $3) RETURNING *",
+         [purchaseid, userid, ticketid]);
+
+         res.json(newPurchase.rows[0]);
     } catch (error) {
         console.log(error.message);
     }
@@ -54,6 +67,15 @@ app.get("/users", async (req, res) => {
     }
 })
 
+app.get("/purchases", async (req, res) => {
+    try {
+        const allPurchases = await pool.query("SELECT * FROM purchases");
+        res.json(allPurchases.rows)
+    } catch (err) {
+        console.error(err.message)
+    }
+})
+
 // SELECT - Only show users of specific first name
 app.get("/select/:firstname", async (req, res) => {
     try {
@@ -66,12 +88,15 @@ app.get("/select/:firstname", async (req, res) => {
     }
 })
 
-// UPDATE - Price of ticket
+// UPDATE - Ticket information
 app.put("/tickets/:id", async (req, res) => {
     try {
         const {id} = req.params;
-        const {price} = req.body;
-        const updateTickets = await pool.query("UPDATE tickets SET price = $1 WHERE ticketID = $2", [price, id])
+        const price = req.body.price;
+        const type = req.body.type;
+        const artist = req.body.artist;
+        const date = req.body.date;
+        await pool.query("UPDATE tickets SET price = $1, type = $2, artist = $3, date = $4 WHERE ticketid = $5", [price, type, artist, date, id])
 
         res.json("Ticket Price has been updated!");
     } catch (err) {
@@ -83,7 +108,19 @@ app.put("/tickets/:id", async (req, res) => {
 app.delete("/tickets/:id", async (req, res) => {
     try {
         const {id} = req.params;
-        const deleteTicket = await pool.query("DELETE FROM tickets WHERE ticketID = $1", [id])
+        const deleteTicket = await pool.query("DELETE FROM tickets WHERE ticketid = $1", [id])
+
+        res.json("Ticket has been deleted...");
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+// DELETE - Remove purchase
+app.delete("/purchases/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        const deleteTicket = await pool.query("DELETE FROM purchases WHERE purchaseid = $1", [id])
 
         res.json("Ticket has been deleted...");
     } catch (err) {
@@ -107,7 +144,7 @@ app.get("/projection/:input/:table", async (req, res) => {
 app.get("/tickets/join/:artist", async (req, res) => {
     try {
         const {artist} = req.params;
-        const tickets = await pool.query("SELECT users.userID, tickets.ticketID, users.firstname, users.lastname FROM tickets INNER JOIN checkout ON tickets.ticketID = checkout.ticketID INNER JOIN users ON checkout.userID = users.userID WHERE artist = $1", [artist]);
+        const tickets = await pool.query("SELECT users.userid, tickets.ticketid, users.firstname, users.lastname FROM tickets INNER JOIN purchases ON tickets.ticketid = purchases.ticketid INNER JOIN users ON purchases.userid = users.userid WHERE artist = $1", [artist]);
         res.json(tickets.rows);
     } catch (err) {
         console.error(err.message)
@@ -117,7 +154,7 @@ app.get("/tickets/join/:artist", async (req, res) => {
 // GROUP BY
 app.get("/group", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT tickets.artist, COUNT(*) FROM tickets INNER JOIN checkout ON tickets.ticketID = checkout.ticketID GROUP BY tickets.artist");
+        const tickets = await pool.query("SELECT tickets.artist, COUNT(*) FROM tickets INNER JOIN purchases ON tickets.ticketid = purchases.ticketid GROUP BY tickets.artist");
        
         res.json(tickets.rows);
     } catch (err) {
@@ -128,7 +165,7 @@ app.get("/group", async (req, res) => {
 // HAVING
 app.get("/having", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT available, AVG(price) FROM tickets GROUP BY available HAVING 100 <= AVG(price)");
+        const tickets = await pool.query("SELECT type, AVG(price) FROM tickets GROUP BY type HAVING 19 <= AVG(price)");
        
         res.json(tickets.rows);
     } catch (err) {
@@ -139,7 +176,7 @@ app.get("/having", async (req, res) => {
 // NESTED
 app.get("/nested", async (req, res) => {
     try {
-        const tickets = await pool.query("With userTickets AS (SELECT checkout.userID, COUNT(*) AS ticketsPurchased FROM checkout GROUP BY checkout.userID HAVING 2 <= COUNT(*)) SELECT AVG(ticketsPurchased) FROM userTickets");
+        const tickets = await pool.query("With userTickets AS (SELECT purchases.userid, COUNT(*) AS ticketsPurchased FROM purchases GROUP BY purchases.userid) SELECT AVG(ticketsPurchased) FROM userTickets");
        
         res.json(tickets.rows);
     } catch (err) {
@@ -150,7 +187,7 @@ app.get("/nested", async (req, res) => {
 // DIVISION
 app.get("/division", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT U.firstname, U.lastname FROM users U WHERE NOT EXISTS ((SELECT DISTINCT artist FROM tickets) EXCEPT (SELECT T1.artist FROM tickets T1, checkout C1 WHERE T1.ticketID = C1.ticketID AND C1.userID = U.userID))");
+        const tickets = await pool.query("SELECT U.firstname, U.lastname FROM users U WHERE NOT EXISTS ((SELECT DISTINCT artist FROM tickets) EXCEPT (SELECT T1.artist FROM tickets T1, purchases C1 WHERE T1.ticketid = C1.ticketid AND C1.userid = U.userid))");
        
         res.json(tickets.rows);
     } catch (err) {

@@ -8,7 +8,6 @@ const Group = () => {
         e.preventDefault();
         try {
             const response = await fetch(`http://localhost:5000/group`)
-            console.log(response)
             const jsonData = await response.json()
             setGroup(jsonData);
         } catch (err) {
@@ -19,12 +18,12 @@ const Group = () => {
 
     return <Fragment>
         <h1 className="mt-5 text-center">GROUP</h1>
-        
+        <h3 className="mt-3 text-center">Returns the number of tickets sold for each artist</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>
         <th>Artist</th>
-        <th>Tickets Sold</th>
+        <th># Tickets Sold</th>
       </tr>
     </thead>
     <tbody> 

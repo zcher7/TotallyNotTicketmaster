@@ -9,6 +9,7 @@ import Users from "./users/Users";
 import Home from "./home/Home";
 import Queries from "./queries/Queries";
 import Viewer from "./viewer/Viewer";
+import Purchases from "./purchases/Purchases";
 
 function App() {
   let component;
@@ -22,11 +23,16 @@ function App() {
     case "/users":
       component = <Users />;
       break;
+    case "/purchases":
+      component = <Purchases />;
+      break;
     case "/queries":
       component = <Queries />;
       break;
     case "/viewer":
       component = <Viewer />;
+      break;
+    default:
       break;
   }
   return <Fragment>

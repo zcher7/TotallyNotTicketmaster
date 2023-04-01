@@ -19,7 +19,7 @@ const Join = () => {
 
     return <Fragment>
         <h1 className="mt-3 text-center">JOIN</h1>
-        
+        <h3 className="mt-3 text-center">Returns all users who own a ticket for a given artist</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>

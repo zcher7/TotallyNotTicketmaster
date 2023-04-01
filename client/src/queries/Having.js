@@ -18,12 +18,12 @@ const Having = () => {
 
     return <Fragment>
         <h1 className="mt-5 text-center">HAVING</h1>
-        
+        <h3 className="mt-3 text-center">Returns average price of sold tickets for each availability type</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>
         <th>Availability</th>
-        <th>Average Cost of Sold Tickets</th>
+        <th>Average Price of Sold Tickets</th>
       </tr>
     </thead>
     <tbody> 

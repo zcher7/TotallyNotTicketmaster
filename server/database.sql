@@ -1,27 +1,27 @@
 CREATE DATABASE ticketmanager;
 
 CREATE TABLE tickets(
-    ticketID SERIAL PRIMARY KEY,
+    ticketid SERIAL PRIMARY KEY,
     price INTEGER,
-    available VARCHAR(30),
+    type VARCHAR(30),
     artist VARCHAR(50), 
     date DATE
 );
 
 CREATE TABLE users(
-    userID SERIAL PRIMARY KEY,
+    userid SERIAL PRIMARY KEY,
     firstName VARCHAR(30),
     lastName VARCHAR(30),
     email VARCHAR(50) UNIQUE,
     birthday DATE
 );
 
-CREATE TABLE checkout(
-    checkoutID SERIAL PRIMARY KEY,
-    userID INTEGER,
-    ticketID INTEGER NOT NULL,
-    FOREIGN KEY (userID) REFERENCES users(userID),
-    FOREIGN KEY (ticketID) REFERENCES tickets(ticketID)
+CREATE TABLE purchases(
+    purchaseid SERIAL PRIMARY KEY,
+    userid INTEGER,
+    ticketid INTEGER NOT NULL,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
+    FOREIGN KEY (ticketid) REFERENCES tickets(ticketid) ON DELETE CASCADE
 );  
 
 SELECT AVG(*)

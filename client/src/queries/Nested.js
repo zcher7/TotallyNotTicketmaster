@@ -18,17 +18,19 @@ const Nested = () => {
 
     return <Fragment>
         <h1 className="mt-5 text-center">NESTED</h1>
-        
+        <h3 className="mt-3 text-center">Returns the average number of tickets owned per user</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>
         <th>Average # of Tickets Owned Per User</th>
+        <th>Rounded Down</th>
       </tr>
     </thead>
     <tbody> 
         {nested.map(a => (
             <tr key={a.avg}>
                 <td>{a.avg}</td>
+                <td>{Math.floor(a.avg)}</td>
             </tr>
         ))}
     </tbody>

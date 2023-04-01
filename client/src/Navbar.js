@@ -9,6 +9,9 @@ export default function Navbar() {
                 <a href="/users">Users</a>
             </li>
             <li>
+                <a href="/purchases">Purchases</a>
+            </li>
+            <li>
                 <a href="/queries">Queries</a>
             </li>
             <li>

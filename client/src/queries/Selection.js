@@ -19,7 +19,7 @@ const Selection = () => {
 
     return <Fragment>
         <h1 className="mt-3 text-center">SELECTION</h1>
-        
+        <h3 className="mt-3 text-center">Returns all users who's first name matches the given name</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>

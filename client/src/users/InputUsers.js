@@ -19,7 +19,7 @@ const InputUsers = () => {
                 body: JSON.stringify(body)
             });
 
-            window.location = "/";
+            window.location = "/users";
         } catch (err) {
             console.error(err.message)
         }

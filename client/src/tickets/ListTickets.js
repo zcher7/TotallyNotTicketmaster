@@ -40,7 +40,7 @@ const ListTickets = () => {
       <tr>
         <th>TicketID</th>
         <th>Price</th>
-        <th>Available</th>
+        <th>Type</th>
         <th>Artist</th>
         <th>Date</th>
         <th>Edit</th>
@@ -52,12 +52,12 @@ const ListTickets = () => {
             <tr key={ticket.ticketid}>
                 <td>{ticket.ticketid}</td>
                 <td>{ticket.price}</td>
-                <td>{ticket.available}</td>
+                <td>{ticket.type}</td>
                 <td>{ticket.artist}</td>
                 <td>{ticket.date}</td>
                 <td><EditTickets ticket={ticket} /> </td>
                 <td>
-                    <button className="btn btn-danger" color="#ff5c5c" onClick={() => deleteTicket(tickets.ticketid)}>Delete</button>
+                    <button className="btn btn-danger" color="#ff5c5c" onClick={() => deleteTicket(ticket.ticketid)}>Delete</button>
                 </td>
             </tr>
         ))}
