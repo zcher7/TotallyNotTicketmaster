@@ -46,18 +46,19 @@ INNER JOIN users ON checkout.userID = users.userID
 WHERE artist = $1
 
 
-SELECT U.firstName, U.lastName
+
+
+
+"Find the emails of users who own a ticket for every artist"
+SELECT U.email
 FROM users U
 WHERE NOT EXISTS (
-    (SELECT DISTINCT artist
-    FROM tickets)
+    (SELECT DISTINCT T.artist
+    FROM tickets T)
     EXCEPT
-    (SELECT T1.artist
-    FROM tickets T1, checkout C1
-    WHERE T1.ticketID = C1.ticketID AND C1.userID = U.userID))
-
-
-
+    (SELECT DISTINCT T1.artist
+    FROM purchases P, Tickets T1
+    WHERE P.userid = U.userid AND P.ticketid = T1.ticketid))
 
 "Find the names of sailors who have reserved every boat reserved by those with a lower rating"
 SELECT S1.sname

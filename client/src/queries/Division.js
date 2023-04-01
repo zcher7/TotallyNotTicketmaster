@@ -18,17 +18,17 @@ const Division = () => {
 
     return <Fragment>
         <h1 className="mt-5 text-center">DIVISION</h1>
-        <h3 className="mt-3 text-center">TBD</h3>
+        <h3 className="mt-3 text-center">Returns the email of users who own a ticket for every artist</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>
-        <th>Division</th>
+        <th>Email</th>
       </tr>
     </thead>
     <tbody> 
         {division.map(a => (
-            <tr key={a.avg}>
-                <td>{a.avg}</td>
+            <tr key={a.email}>
+                <td>{a.email}</td>
             </tr>
         ))}
     </tbody>

@@ -18,18 +18,18 @@ const Having = () => {
 
     return <Fragment>
         <h1 className="mt-5 text-center">HAVING</h1>
-        <h3 className="mt-3 text-center">Returns average price of sold tickets for each availability type</h3>
+        <h3 className="mt-3 text-center">Returns average price of sold tickets for each type with average greater than 20</h3>
         <table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>
-        <th>Availability</th>
+        <th>Type</th>
         <th>Average Price of Sold Tickets</th>
       </tr>
     </thead>
     <tbody> 
         {having.map(a => (
-            <tr key={a.available}>
-                <td>{a.available}</td>
+            <tr key={a.type}>
+                <td>{a.type}</td>
                 <td>{a.avg}</td>
             </tr>
         ))}

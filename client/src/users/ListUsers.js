@@ -53,7 +53,7 @@ const ListUsers = () => {
                 <td>{user.email}</td>
                 <td>{user.birthday}</td>
                 <td>
-                    <button className="btn btn-danger" color="#ff5c5c" onClick={() => deleteUser(users.userid)}>Delete</button>
+                    <button className="btn btn-danger" color="#ff5c5c" onClick={() => deleteUser(user.userid)}>Delete</button>
                 </td>
             </tr>
         ))}

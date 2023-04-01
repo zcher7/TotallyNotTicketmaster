@@ -104,11 +104,23 @@ app.put("/tickets/:id", async (req, res) => {
     }
 })
 
-// DELETE - Remove ticket from
+// DELETE - Remove ticket
 app.delete("/tickets/:id", async (req, res) => {
     try {
         const {id} = req.params;
-        const deleteTicket = await pool.query("DELETE FROM tickets WHERE ticketid = $1", [id])
+        await pool.query("DELETE FROM tickets WHERE ticketid = $1", [id])
+
+        res.json("Ticket has been deleted...");
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+// DELETE - Remove users
+app.delete("/users/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query("DELETE FROM users WHERE userid = $1", [id])
 
         res.json("Ticket has been deleted...");
     } catch (err) {
@@ -187,8 +199,7 @@ app.get("/nested", async (req, res) => {
 // DIVISION
 app.get("/division", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT U.firstname, U.lastname FROM users U WHERE NOT EXISTS ((SELECT DISTINCT artist FROM tickets) EXCEPT (SELECT T1.artist FROM tickets T1, purchases C1 WHERE T1.ticketid = C1.ticketid AND C1.userid = U.userid))");
-       
+        const tickets = await pool.query("SELECT U.email FROM users U WHERE NOT EXISTS ((SELECT DISTINCT T.artist FROM tickets T) EXCEPT (SELECT DISTINCT T1.artist FROM purchases P, Tickets T1 WHERE P.userid = U.userid AND P.ticketid = T1.ticketid))");
         res.json(tickets.rows);
     } catch (err) {
         console.error(err.message)
