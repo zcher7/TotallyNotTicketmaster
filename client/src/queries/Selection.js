@@ -42,13 +42,13 @@ const Selection = () => {
         ))}
     </tbody>
   </table>
-
+  <label>
     <form onSubmit={getSelection} className="d-flex">
                 <input type="text" className="form-control mt-5" placeholder="Enter First Name" value={firstname} onChange={e =>
-                setFirstname(e.target.value)}/>       
-                <button className="btn btn-info mt-5" >Query</button>
-                
+                setFirstname(e.target.value.replace(/[^a-z]/gi, ""))}/>       
+                <button className="btn btn-info mt-5" >Query</button>                
     </form>
+    </label>
   </Fragment>
 };
 

@@ -33,18 +33,43 @@ const InputUsers = () => {
     return (
         <Fragment>
             <h1 className="text-center mt-5">Add User</h1>
-            <form onSubmit={onSubmitForm}>
-                <input type="number" className="form-control mt-3" placeholder="Enter UserID" value={userid} onChange={e =>
+            <form onSubmit={onSubmitForm} style={{justifyContent: "center", textAlign: "center"}}>
+            
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    UserID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="number" className="form-control mt-3" placeholder="Enter UserID" value={userid} onChange={e =>
                 setUserid(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter First Name" value={firstname} onChange={e =>
-                setFirstname(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter Last Name" value={lastname} onChange={e =>
-                setLastname(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter Email" value={email} onChange={e =>
-                setEmail(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter Birthday" value={birthday} onChange={e =>
-                setBirthday(e.target.value)}/>        
-                <button className="btn btn-success mt-5" disabled={!validate()}>Add</button>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    First Name: &nbsp;&nbsp;
+                    <label>
+                        <input type="text" className="form-control" placeholder="Enter First Name" value={firstname} onChange={e =>
+                setFirstname(e.target.value.replace(/[^a-z]/gi, ""))}/>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Last Name:&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="text" className="form-control" placeholder="Enter Last Name" value={lastname} onChange={e =>
+                setLastname(e.target.value.replace(/[^a-z]/gi, ""))}/>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label><input type="email" className="form-control" placeholder="Enter Email" value={email} onChange={e =>
+                setEmail(e.target.value.replace(/[^a-z@.]/gi, ""))}/>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Birthday:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="date" className="form-control" max="2022-04-12" value={birthday} onChange={e =>
+                setBirthday(e.target.value.replace(/[^0-9-]*$/gmi, ""))}required/>
+                </label>
+                </p>    
+                <p><button className="btn btn-success" disabled={!validate()}>Add</button></p>
             </form>
         </Fragment>
         

@@ -31,14 +31,29 @@ const InputPurchases = () => {
     return (
         <Fragment>
             <h1 className="text-center mt-5">Add Purchase</h1>
-            <form onSubmit={onSubmitForm}>
-                <input type="number" className="form-control mt-3" placeholder="Enter PurchaseID" value={purchaseid} onChange={e =>
+            <form onSubmit={onSubmitForm} style={{justifyContent: "center", textAlign: "center"}}>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    PurchaseID: &nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="number" className="form-control mt-3" placeholder="Enter PurchaseID" value={purchaseid} onChange={e =>
                 setPurchaseid(e.target.value)}/>
-                <input type="number" className="form-control mt-3" placeholder="Enter UserID" value={userid} onChange={e =>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    UserID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="number" className="form-control" placeholder="Enter UserID" value={userid} onChange={e =>
                 setUserid(e.target.value)}/>
-                <input type="number" className="form-control mt-3" placeholder="Enter TicketID" value={ticketid} onChange={e =>
-                setTicketid(e.target.value)}/>      
-                <button className="btn btn-success mt-5" disabled={!validate()}>Add</button>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    TicketID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="number" className="form-control" placeholder="Enter TicketID" value={ticketid} onChange={e =>
+                setTicketid(e.target.value)}/>
+                </label>
+                </p>    
+                <button className="btn btn-success" disabled={!validate()}>Add</button>
             </form>
         </Fragment>
         

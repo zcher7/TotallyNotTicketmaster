@@ -40,13 +40,14 @@ const Join = () => {
         ))}
     </tbody>
   </table>
-
+    <label>
     <form onSubmit={getJoin} className="d-flex">
                 <input type="text" className="form-control mt-5" placeholder="Enter Artist" value={artist} onChange={e =>
-                setArtist(e.target.value)}/>       
+                setArtist(e.target.value.replace(/[^a-z]/gi, ""))}/>       
                 <button className="btn btn-info mt-5" >Query</button>
                 
     </form>
+    </label>
   
   
   

@@ -33,18 +33,43 @@ const InputTickets = () => {
     return (
         <Fragment>
             <h1 className="text-center mt-5">Add Ticket</h1>
-            <form onSubmit={onSubmitForm}>
-                <input type="number" className="form-control mt-3" placeholder="Enter TicketID" value={ticketid} onChange={e =>
+            <form onSubmit={onSubmitForm} style={{justifyContent: "center", textAlign: "center"}}>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Ticket ID: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="number" className="form-control mt-3" placeholder="Enter TicketID" value={ticketid} onChange={e =>
                 setTicketid(e.target.value)}/>
-                <input type="number" className="form-control mt-3" placeholder="Enter Price" value={price} onChange={e =>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Price: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="number" className="form-control" placeholder="Enter Price" value={price} onChange={e =>
                 setPrice(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter Type" value={type} onChange={e =>
-                setType(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter Artist" value={artist} onChange={e =>
-                setArtist(e.target.value)}/>
-                <input type="text" className="form-control mt-3" placeholder="Enter Date" value={date} onChange={e =>
-                setDate(e.target.value)}/>        
-                <button className="btn btn-success mt-5" disabled={!validate()}>Add</button>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="text" className="form-control" placeholder="Enter Type" value={type} onChange={e =>
+                setType(e.target.value.replace(/[^a-z]/gi, ""))}/>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Artist: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="text" className="form-control" placeholder="Enter Artist" value={artist} onChange={e =>
+                setArtist(e.target.value.replace(/[^a-z]/gi, ""))}/>
+                </label>
+                </p>
+                <p style={{fontSize: 20, fontWeight: "bold"}}>
+                    Date: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                        <input type="date" className="form-control" placeholder="Enter Date" value={date} onChange={e =>
+                setDate(e.target.value.replace(/[^0-9-]*$/gmi, ""))}/>
+                </label>
+                </p>       
+                <button className="btn btn-success" disabled={!validate()}>Add</button>
             </form>
         </Fragment>
         

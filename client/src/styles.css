@@ -45,3 +45,6 @@ nav li:hover {
     background-color: rgb(139, 139, 211);
 }
 
+.modal-content {
+    background-color: #494b4d;
+}
