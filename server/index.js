@@ -109,7 +109,19 @@ app.delete("/tickets/:id", async (req, res) => {
     try {
         const {id} = req.params;
         await pool.query("DELETE FROM tickets WHERE ticketid = $1", [id])
+        res.json("Ticket has been deleted...");
+    } catch (err) {
+        console.log(err.message)
+    }
+})
 
+// DELETE - Delete ticket by value
+app.delete("/tickets/del/:column/:val", async (req, res) => {
+    console.log("HUH???????????")
+    try {
+        const column = req.params.column;
+        const val = req.params.val;
+        await pool.query(`DELETE FROM tickets WHERE ${column} = $1`, [val])
         res.json("Ticket has been deleted...");
     } catch (err) {
         console.log(err.message)
@@ -177,7 +189,7 @@ app.get("/group", async (req, res) => {
 // HAVING
 app.get("/having", async (req, res) => {
     try {
-        const tickets = await pool.query("SELECT type, AVG(price) FROM tickets GROUP BY type HAVING 19 <= AVG(price)");
+        const tickets = await pool.query("SELECT type, AVG(price) FROM tickets GROUP BY type HAVING 20 <= AVG(price)");
        
         res.json(tickets.rows);
     } catch (err) {

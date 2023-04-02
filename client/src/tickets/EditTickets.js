@@ -47,10 +47,10 @@ const EditTickets = ({ticket}) => {
           </div>
     
           <div className="modal-body">
-            <input type="text" className="form-control" value={price} onChange={e => setPrice(e.target.value)}/>
-            <input type="text" className="form-control" value={type} onChange={e => setType(e.target.value)}/>
-            <input type="text" className="form-control" value={artist} onChange={e => setArtist(e.target.value)}/>
-            <input type="text" className="form-control" value={date} onChange={e => setDate(e.target.value)}/>
+            <input type="number" className="form-control" value={price} onChange={e => setPrice(e.target.value)}/>
+            <input type="text" className="form-control" value={type} onChange={e => setType(e.target.value.replace(/[^a-z]/gi, ""))}/>
+            <input type="text" className="form-control" value={artist} onChange={e => setArtist(e.target.value.replace(/[^a-z]/gi, ""))}/>
+            <input type="date" className="form-control" value={date} onChange={e => setDate(e.target.value.replace(/[^0-9-]*$/gmi, ""))}/>
           </div>
     
           <div className="modal-footer">

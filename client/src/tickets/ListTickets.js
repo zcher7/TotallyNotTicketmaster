@@ -5,6 +5,8 @@ import EditTickets from "./EditTickets";
 const ListTickets = () => {
 
     const [tickets, setTickets] = useState([]);
+    const [column, setColumn] = useState("");
+    const [val, setVal] = useState("");
 
     // Delete ticket function
 
@@ -19,6 +21,18 @@ const ListTickets = () => {
             console.error(err.message)
         }
     }
+
+    const deleteTicketByValue = async e => {
+      e.preventDefault();
+      try {
+          await fetch(`http://localhost:5000/tickets/del/${column}/${val}`, {
+              method: "DELETE"
+          })
+          window.location = "/tickets";
+      } catch (err) {
+          console.error(err.message)
+      }
+  }
 
     const getTickets = async () => {
         try {
@@ -35,7 +49,38 @@ const ListTickets = () => {
         getTickets();
     }, [])
 
-    return <Fragment><table className="table table-dark table-striped mt-5 text-center">
+    return <Fragment>
+      <form className="mt-4" style={{justifyContent: "center", textAlign: "center"}}>
+        <label>
+        <button type="button" className="btn btn-primary" data-toggle="modal" data-target={"#deleteModal"}>
+      Delete By Value
+    </button>
+    
+    <div className="modal" id={"deleteModal"} data-toggle="static">
+      <div className="modal-dialog">
+        <div className="modal-content">
+    
+          <div className="modal-header">
+            <h4 className="modal-title">Delete Tickets</h4>
+            <button type="button" className="close" data-dismiss="modal">&times;</button>
+          </div>
+    
+          <div className="modal-body">
+            <input type="text" className="form-control" placeholder="Enter Column" value={column} onChange={e => setColumn(e.target.value.replace(/[^a-z]/gi, ""))}/>
+            <input type="text" className="form-control" placeholder="Enter Value" value={val} onChange={e => setVal(e.target.value.replace(/[^a-z0-9-]/gi, ""))}/>
+          </div>
+    
+          <div className="modal-footer">
+          <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={e => deleteTicketByValue(e)}>Delete</button>
+            <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+    
+        </div>
+      </div>
+    </div>
+        </label>
+      </form>
+      <table className="table table-dark table-striped mt-4 text-center">
     <thead>
       <tr>
         <th>TicketID</th>
@@ -60,58 +105,7 @@ const ListTickets = () => {
                     <button className="btn btn-danger" color="#ff5c5c" onClick={() => deleteTicket(ticket.ticketid)}>Delete</button>
                 </td>
             </tr>
-        ))}
-        {/* <tr>
-        <td>Default</td>
-        <td>Defaultson</td>
-        <td>def@somemail.com</td>
-      </tr>   
-      <tr class="table-primary">
-        <td>Primary</td>
-        <td>Joe</td>
-        <td>joe@example.com</td>
-      </tr>
-      <tr class="table-success">
-        <td>Success</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr class="table-danger">
-        <td>Danger</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr class="table-info">
-        <td>Info</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-      <tr class="table-warning">
-        <td>Warning</td>
-        <td>Refs</td>
-        <td>bo@example.com</td>
-      </tr>
-      <tr class="table-active">
-        <td>Active</td>
-        <td>Activeson</td>
-        <td>act@example.com</td>
-      </tr>
-      <tr class="table-secondary">
-        <td>Secondary</td>
-        <td>Secondson</td>
-        <td>sec@example.com</td>
-      </tr>
-      <tr class="table-light">
-        <td>Light</td>
-        <td>Angie</td>
-        <td>angie@example.com</td>
-      </tr>
-      <tr class="table-dark text-dark">
-        <td>Dark</td>
-        <td>Bo</td>
-        <td>bo@example.com</td>
-      </tr>*/}
-    
+        ))}   
       
     </tbody>
   </table></Fragment>
