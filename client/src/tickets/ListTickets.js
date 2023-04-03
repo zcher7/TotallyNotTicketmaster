@@ -7,6 +7,8 @@ const ListTickets = () => {
     const [tickets, setTickets] = useState([]);
     const [column, setColumn] = useState("");
     const [val, setVal] = useState("");
+    const [success, setSuccess] = useState(null);
+    const [success1, setSuccess1] = useState(null);
 
     // Delete ticket function
 
@@ -14,7 +16,9 @@ const ListTickets = () => {
         try {
             await fetch(`http://localhost:5000/tickets/${id}`, {
                 method: "DELETE"
-            });
+            })
+            .then(res => res.json())
+            .then(data => validateResponse(data));
 
             setTickets(tickets.filter(ticket => ticket.ticketid !== id));
         } catch (err) {
@@ -22,17 +26,32 @@ const ListTickets = () => {
         }
     }
 
+    const validateResponse = async (data) => {
+      if ("success" in data) {
+          setSuccess(data.success);
+      }
+  }
+
     const deleteTicketByValue = async e => {
       e.preventDefault();
       try {
           await fetch(`http://localhost:5000/tickets/del/${column}/${val}`, {
               method: "DELETE"
           })
-          window.location = "/tickets";
+          .then(res => res.json())
+          .then(data => validateResponse2(data));
       } catch (err) {
           console.error(err.message)
       }
   }
+
+  const validateResponse2 = async (data) => {
+    if ("success" in data) {
+        setSuccess1(data.success);
+    } else {
+        setSuccess1("No");
+    }
+}
 
     const getTickets = async () => {
         try {
@@ -45,6 +64,10 @@ const ListTickets = () => {
         }
     }
 
+    const validate = () => {
+      return column.length && val.length;
+  }
+
     useEffect(() => {
         getTickets();
     }, [])
@@ -52,6 +75,9 @@ const ListTickets = () => {
     return <Fragment>
       <form className="mt-4" style={{justifyContent: "center", textAlign: "center"}}>
         <label>
+        <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success&&<div>{success}</div>}</div>
+        <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success1&&success1!=="No"&&<div>Row(s) Deleted (Refresh)</div>}</div>
+        <div style={{fontSize: 20, fontWeight: "bold", color: "red"}}>{success1=="No"&&<div>Column Not Found</div>}</div>
         <button type="button" className="btn btn-primary" data-toggle="modal" data-target={"#deleteModal"}>
       Delete By Value
     </button>
@@ -71,7 +97,7 @@ const ListTickets = () => {
           </div>
     
           <div className="modal-footer">
-          <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={e => deleteTicketByValue(e)}>Delete</button>
+          <button type="button" className="btn btn-primary" data-dismiss="modal" disabled={!validate()} onClick={e => deleteTicketByValue(e)}>Delete</button>
             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
     

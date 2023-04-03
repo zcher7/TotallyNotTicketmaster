@@ -19,7 +19,7 @@ const ListPurchases = () => {
         getPurchases();
     }, [])
 
-    return <Fragment><table className="table table-dark table-striped mt-5 text-center">
+    return <Fragment><table className="table table-dark table-striped mt-3 text-center">
     <thead>
       <tr>
         <th>PurchaseID</th>

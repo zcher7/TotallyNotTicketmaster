@@ -7,6 +7,7 @@ const InputUsers = () => {
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
+    const [error, setError] = useState(null);
 
     const onSubmitForm = async e => {
         e.preventDefault();
@@ -17,17 +18,24 @@ const InputUsers = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
-            });
-
-            window.location = "/users";
+            })
+            .then(res => res.json())
+            .then(data => validateResponse(data));
         } catch (err) {
             console.error(err.message)
         }
     }
 
+    const validateResponse = async (data) => {
+        if ("error" in data) {
+            setError(data.error);
+        } else {
+            setError("No");
+        }
+    }
+
     const validate = () => {
         return userid.length && firstname.length && lastname.length && email.length && birthday.length;
-        
     }
 
     return (
@@ -70,6 +78,8 @@ const InputUsers = () => {
                 </label>
                 </p>    
                 <p><button className="btn btn-success" disabled={!validate()}>Add</button></p>
+                <div style={{fontSize: 20, fontWeight: "bold", color: "red"}}>{error && (error !== "No")&&<div>{error}</div>}</div>       
+                <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{(error == "No") &&<div>User Added! (Refresh)</div>}</div>           
             </form>
         </Fragment>
         

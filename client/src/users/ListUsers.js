@@ -3,6 +3,7 @@ import React, {Fragment, useEffect, useState} from "react";
 const ListUsers = () => {
 
     const [users, setUsers] = useState([]);
+    const [success, setSuccess] = useState(null);
 
     // Delete User function
 
@@ -10,13 +11,21 @@ const ListUsers = () => {
         try {
             await fetch(`http://localhost:5000/users/${id}`, {
                 method: "DELETE"
-            });
+            })
+            .then(res => res.json())
+            .then(data => validateResponse(data));
 
             setUsers(users.filter(user => user.userid !== id));
         } catch (err) {
             console.error(err.message)
         }
     }
+
+    const validateResponse = async (data) => {
+      if ("success" in data) {
+          setSuccess(data.success);
+      }
+  }
 
     const getUsers = async () => {
         try {
@@ -33,7 +42,11 @@ const ListUsers = () => {
         getUsers();
     }, [])
 
-    return <Fragment><table className="table table-dark table-striped mt-5 text-center">
+    return <Fragment>
+      <form className="mt-4" style={{justifyContent: "center", textAlign: "center"}}>
+      <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success&&<div>{success}</div>}</div>
+      </form>
+      <table className="table table-dark table-striped mt-5 text-center">
     <thead>
       <tr>
         <th>UserID</th>
@@ -57,56 +70,6 @@ const ListUsers = () => {
                 </td>
             </tr>
         ))}
-        {/* <tr>
-        <td>Default</td>
-        <td>Defaultson</td>
-        <td>def@somemail.com</td>
-      </tr>   
-      <tr class="table-primary">
-        <td>Primary</td>
-        <td>Joe</td>
-        <td>joe@example.com</td>
-      </tr>
-      <tr class="table-success">
-        <td>Success</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr class="table-danger">
-        <td>Danger</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr class="table-info">
-        <td>Info</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-      <tr class="table-warning">
-        <td>Warning</td>
-        <td>Refs</td>
-        <td>bo@example.com</td>
-      </tr>
-      <tr class="table-active">
-        <td>Active</td>
-        <td>Activeson</td>
-        <td>act@example.com</td>
-      </tr>
-      <tr class="table-secondary">
-        <td>Secondary</td>
-        <td>Secondson</td>
-        <td>sec@example.com</td>
-      </tr>
-      <tr class="table-light">
-        <td>Light</td>
-        <td>Angie</td>
-        <td>angie@example.com</td>
-      </tr>
-      <tr class="table-dark text-dark">
-        <td>Dark</td>
-        <td>Bo</td>
-        <td>bo@example.com</td>
-      </tr>*/}
     
       
     </tbody>

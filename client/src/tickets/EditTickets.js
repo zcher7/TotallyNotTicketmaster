@@ -1,34 +1,41 @@
 import React, {Fragment, useState} from "react";
 
 const EditTickets = ({ticket}) => {
+    const currentDate = new Date(ticket.date).toISOString().substring(0,10) 
     const [price, setPrice] = useState(ticket.price);
     const [type, setType] = useState(ticket.type);
     const [artist, setArtist] = useState(ticket.artist);
-    const [date, setDate] = useState(ticket.date);
+    const [date, setDate] = useState(currentDate);
+    const [success, setSuccess] = useState(null);
 
     // Edit Ticket function
     const updateTicket = async e => {
         e.preventDefault();
         try {
             const body = {price, type, artist, date}
-            console.log(body)
             await fetch(`http://localhost:5000/tickets/${ticket.ticketid}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)
             })
-
-            window.location = "/tickets";
+            .then(res => res.json())
+            .then(data => validateResponse(data));
         } catch (err) {
             console.error(err.message)
         }
     }
 
+    const validateResponse = async (data) => {
+      if ("success" in data) {
+          setSuccess(data.success);
+      }
+  }
+
     const resetAll = async e => {
       setPrice(ticket.price)
       setType(ticket.type)
       setArtist(ticket.artist)
-      setDate(ticket.date)
+      setDate(new Date(ticket.date).toISOString().substring(0,10))
     }
 
 
@@ -54,7 +61,8 @@ const EditTickets = ({ticket}) => {
           </div>
     
           <div className="modal-footer">
-          <button type="button" className="btn btn-warning" data-dismiss="modal" onClick={e => updateTicket(e)}>Edit</button>
+            <h5 style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success&&<div>{success}</div>}</h5>
+          <button type="button" className="btn btn-warning" onClick={e => updateTicket(e)}>Edit</button>
             <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={e => resetAll()}>Close</button>
           </div>
     

@@ -7,27 +7,35 @@ const InputTickets = () => {
     const [type, setType] = useState("");
     const [artist, setArtist] = useState("");
     const [date, setDate] = useState("");
+    const [error, setError] = useState(null);
 
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
             const body = {ticketid, price, type, artist, date}
-            console.log(JSON.stringify(body))
             await fetch("http://localhost:5000/tickets", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
-            });
-
-            window.location = "/tickets";
+            })
+            .then(res => res.json())
+            .then(data => validateResponse(data));
+        
         } catch (err) {
             console.error(err.message)
         }
     }
 
+    const validateResponse = async (data) => {
+        if ("error" in data) {
+            setError(data.error);
+        } else {
+            setError("No");
+        }
+    }
+
     const validate = () => {
         return ticketid.length && price.length && type.length && artist.length && date.length;
-        
     }
 
     return (
@@ -68,8 +76,10 @@ const InputTickets = () => {
                         <input type="date" className="form-control" placeholder="Enter Date" value={date} onChange={e =>
                 setDate(e.target.value.replace(/[^0-9-]*$/gmi, ""))}/>
                 </label>
-                </p>       
+                </p>
                 <button className="btn btn-success" disabled={!validate()}>Add</button>
+                <div style={{fontSize: 20, fontWeight: "bold", color: "red"}}>{error && (error !== "No")&&<div>{error}</div>}</div>       
+                <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{(error == "No") &&<div>Ticket Added! (Refresh)</div>}</div>             
             </form>
         </Fragment>
         

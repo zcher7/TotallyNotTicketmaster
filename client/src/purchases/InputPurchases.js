@@ -5,21 +5,35 @@ const InputPurchases = () => {
     const [purchaseid, setPurchaseid] = useState("");
     const [userid, setUserid] = useState("");
     const [ticketid, setTicketid] = useState("");
+    const [error, setError] = useState(null);
 
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
             const body = {purchaseid, userid, ticketid}
-            console.log(JSON.stringify(body))
             await fetch("http://localhost:5000/purchases", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
-            });
-
-            window.location = "/purchases";
+            })
+            .then(res => res.json())
+            .then(data => validateResponse(data));
         } catch (err) {
             console.error(err.message)
+        }
+    }
+
+    const validateResponse = async (data) => {
+        if ("error" in data) {
+            if (data["error"].includes("purchases_userid_fkey")) {
+                setError("UserID Not Found");
+            } else if (data["error"].includes("purchases_ticketid_fkey")) {
+                setError("TicketID Not Found");
+            } else {
+                setError("Duplicate PurchaseID");
+            }
+        } else {
+            setError("No");
         }
     }
 
@@ -54,6 +68,8 @@ const InputPurchases = () => {
                 </label>
                 </p>    
                 <button className="btn btn-success" disabled={!validate()}>Add</button>
+                <div style={{fontSize: 20, fontWeight: "bold", color: "red"}}>{error && (error !== "No")&&<div>{error}</div>}</div>       
+                <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{(error == "No") &&<div>Purchase Added! (Refresh)</div>}</div>   
             </form>
         </Fragment>
         
