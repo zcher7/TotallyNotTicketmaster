@@ -76,8 +76,6 @@ const ListTickets = () => {
       <form className="mt-4" style={{justifyContent: "center", textAlign: "center"}}>
         <label>
         <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success&&<div>{success}</div>}</div>
-        <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success1&&success1!=="No"&&<div>Row(s) Deleted (Refresh)</div>}</div>
-        <div style={{fontSize: 20, fontWeight: "bold", color: "red"}}>{success1=="No"&&<div>Column Not Found</div>}</div>
         <button type="button" className="btn btn-primary" data-toggle="modal" data-target={"#deleteModal"}>
       Delete By Value
     </button>
@@ -97,7 +95,9 @@ const ListTickets = () => {
           </div>
     
           <div className="modal-footer">
-          <button type="button" className="btn btn-primary" data-dismiss="modal" disabled={!validate()} onClick={e => deleteTicketByValue(e)}>Delete</button>
+          <div style={{fontSize: 20, fontWeight: "bold", color: "lawngreen"}}>{success1&&success1!=="No"&&<div>Row(s) Deleted (Refresh)</div>}</div>
+        <div style={{fontSize: 20, fontWeight: "bold", color: "red"}}>{success1=="No"&&<div>Column Not Found</div>}</div>
+          <button type="button" className="btn btn-primary" disabled={!validate()} onClick={e => deleteTicketByValue(e)}>Delete</button>
             <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
     
