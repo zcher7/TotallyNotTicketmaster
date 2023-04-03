@@ -43,6 +43,12 @@ INSERT INTO tickets VALUES(16, 3, 'Seated', 'Rihanna', '2023-05-01');
 INSERT INTO tickets VALUES(17, 50, 'Seated', 'Adele', '2023-05-01');
 INSERT INTO tickets VALUES(18, 30, 'Premium', 'Adele', '2023-05-01');
 INSERT INTO tickets VALUES(19, 35, 'Premium', 'Adele', '2023-05-01');
+INSERT INTO tickets VALUES(20, 20, 'VIP', 'Drake', '2002-02-01');
+INSERT INTO tickets VALUES(21, 25, 'VIP', 'Drake', '2002-02-01');
+INSERT INTO tickets VALUES(22, 40, 'VIP', 'Drake', '2002-02-01');
+INSERT INTO tickets VALUES(23, 50, 'VIP', 'Beyonce', '2000-02-22');
+INSERT INTO tickets VALUES(24, 50, 'VIP', 'Beyonce', '2000-02-22');
+INSERT INTO tickets VALUES(25, 60, 'VIP', 'Beyonce', '2000-02-22');
 
 INSERT INTO users VALUES(1, 'Joe', 'Biden', 'j@biden.com', '0100-01-01');
 INSERT INTO users VALUES(2, 'Joe', 'Max', 'j@max.com', '2000-01-01');
@@ -66,6 +72,9 @@ INSERT INTO purchases VALUES(7, 5, 8);
 INSERT INTO purchases VALUES(8, 6, 9);
 INSERT INTO purchases VALUES(9, 7, 10);
 INSERT INTO purchases VALUES(10, 2, 12);
+INSERT INTO purchases VALUES(11, 1, 13);
+INSERT INTO purchases VALUES(12, 2, 20);
+INSERT INTO purchases VALUES(13, 2, 24);
 
 
 

@@ -118,7 +118,6 @@ app.delete("/tickets/:id", async (req, res) => {
 
 // DELETE - Delete ticket by value
 app.delete("/tickets/del/:column/:val", async (req, res) => {
-    console.log("HUH???????????")
     try {
         const column = req.params.column;
         const val = req.params.val;
