@@ -1,5 +1,7 @@
 CREATE DATABASE ticketmanager;
 
+\c ticketmanager
+
 CREATE TABLE tickets(
     ticketid SERIAL PRIMARY KEY,
     price INTEGER,
