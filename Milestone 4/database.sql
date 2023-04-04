@@ -72,6 +72,6 @@ INSERT INTO purchases VALUES(7, 5, 8);
 INSERT INTO purchases VALUES(8, 6, 9);
 INSERT INTO purchases VALUES(9, 7, 10);
 INSERT INTO purchases VALUES(10, 2, 12);
-INSERT INTO purchases VALUES(11, 1, 13);
+INSERT INTO purchases VALUES(11, 1, 23);
 INSERT INTO purchases VALUES(12, 2, 20);
 INSERT INTO purchases VALUES(13, 2, 24);
