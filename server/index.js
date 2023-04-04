@@ -36,6 +36,7 @@ app.post("/users", async(req, res) => {
     }
 })
 
+// INSERT
 app.post("/purchases", async(req, res) => {
     try {
         const {purchaseid, userid, ticketid} = req.body;

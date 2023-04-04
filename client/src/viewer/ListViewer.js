@@ -27,9 +27,9 @@ const ListViewer = () => {
         
         <form onSubmit={getViewer} className="d-flex">
                 <input type="text" className="form-control mt-5" placeholder="Enter Columns (e.g. userid,firstname,email)" value={input} onChange={e =>
-                setInput(e.target.value)}/>
+                setInput(e.target.value.replace(/[^a-z,]/gi, ""))}/>
                 <input type="text" className="form-control mt-5" placeholder="Enter Table (e.g. users)" value={table} onChange={e =>
-                setTable(e.target.value)}/>
+                setTable(e.target.value.replace(/[^a-z]/gi, ""))}/>
                 <button className="btn btn-dark mt-5" >View Table</button>
                 
     </form>
