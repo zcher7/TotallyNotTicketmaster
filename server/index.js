@@ -9,34 +9,7 @@ app.use(express.json());
 
 // ROUTES
 
-app.post("/tickets", async(req, res) => {
-    try {
-        const {ticketid, price, type, artist, date} = req.body;
-        const newTicket = await pool.query("INSERT INTO tickets (ticketid, price, type, artist, date)" +
-                                            " VALUES($1, $2, $3, $4, $5) RETURNING *",
-         [ticketid, price, type, artist, date]);
-         res.json(newTicket.rows[0]);
-    } catch (error) {
-        res.json({error: "Duplicate TicketID"});
-        console.log(error.message);
-    }
-})
-
-app.post("/users", async(req, res) => {
-    try {
-        const {userid, firstname, lastname, email, birthday} = req.body;
-        const newUser = await pool.query("INSERT INTO users (userid, firstname, lastname, email, birthday)" +
-                                            " VALUES($1, $2, $3, $4, $5) RETURNING *",
-         [userid, firstname, lastname, email, birthday]);
-
-         res.json(newUser.rows[0]);
-    } catch (error) {
-        res.json({error: "Duplicate UserID"});
-        console.log(error.message);
-    }
-})
-
-// INSERT
+// INSERT - Add new purchase
 app.post("/purchases", async(req, res) => {
     try {
         const {purchaseid, userid, ticketid} = req.body;
@@ -51,42 +24,16 @@ app.post("/purchases", async(req, res) => {
     }
 })
 
-app.get("/tickets", async (req, res) => {
+// DELETE - Delete ticket by value
+app.delete("/tickets/del/:column/:val", async (req, res) => {
     try {
-        const allTickets = await pool.query("SELECT * FROM tickets ORDER BY ticketid ASC");
-        res.json(allTickets.rows)
+        const column = req.params.column;
+        const val = req.params.val;
+        await pool.query(`DELETE FROM tickets WHERE ${column} = $1`, [val])
+        res.json({success: "Row(s) Deleted"});
     } catch (err) {
-        console.error(err.message)
-    }
-})
-
-app.get("/users", async (req, res) => {
-    try {
-        const allUsers = await pool.query("SELECT * FROM users ORDER BY userid ASC");
-        res.json(allUsers.rows)
-    } catch (err) {
-        console.error(err.message)
-    }
-})
-
-app.get("/purchases", async (req, res) => {
-    try {
-        const allPurchases = await pool.query("SELECT * FROM purchases ORDER BY purchaseid ASC");
-        res.json(allPurchases.rows)
-    } catch (err) {
-        console.error(err.message)
-    }
-})
-
-// SELECT - Only show users of specific first name
-app.get("/select/:firstname", async (req, res) => {
-    try {
-        const {firstname} = req.params;
-        const tickets = await pool.query("SELECT * FROM users WHERE firstname = $1", [firstname]);
-
-        res.json(tickets.rows);
-    } catch (err) {
-        console.error(err.message)
+        res.json({error: "Column Not Found"});
+        console.log(err.message)
     }
 })
 
@@ -106,39 +53,15 @@ app.put("/tickets/:id", async (req, res) => {
     }
 })
 
-// DELETE - Remove ticket
-app.delete("/tickets/:id", async (req, res) => {
+// SELECTION - Only show users of specific first name
+app.get("/select/:firstname", async (req, res) => {
     try {
-        const {id} = req.params;
-        await pool.query("DELETE FROM tickets WHERE ticketid = $1", [id])
-        res.json({success: "Row Deleted"});
-    } catch (err) {
-        console.log(err.message)
-    }
-})
+        const {firstname} = req.params;
+        const tickets = await pool.query("SELECT * FROM users WHERE firstname = $1", [firstname]);
 
-// DELETE - Delete ticket by value
-app.delete("/tickets/del/:column/:val", async (req, res) => {
-    try {
-        const column = req.params.column;
-        const val = req.params.val;
-        await pool.query(`DELETE FROM tickets WHERE ${column} = $1`, [val])
-        res.json({success: "Row(s) Deleted"});
+        res.json(tickets.rows);
     } catch (err) {
-        res.json({error: "Column Not Found"});
-        console.log(err.message)
-    }
-})
-
-// DELETE - Remove users
-app.delete("/users/:id", async (req, res) => {
-    try {
-        const {id} = req.params;
-        await pool.query("DELETE FROM users WHERE userid = $1", [id])
-
-        res.json({success: "Row Deleted"});
-    } catch (err) {
-        console.log(err.message)
+        console.error(err.message)
     }
 })
 
@@ -153,6 +76,7 @@ app.get("/projection/:input/:table", async (req, res) => {
         console.error(err.message)
     }
 })
+
 
 // JOIN
 app.get("/tickets/join/:artist", async (req, res) => {
@@ -208,9 +132,84 @@ app.get("/division", async (req, res) => {
     }
 })
 
+// Additional Routes
 
+app.post("/tickets", async(req, res) => {
+    try {
+        const {ticketid, price, type, artist, date} = req.body;
+        const newTicket = await pool.query("INSERT INTO tickets (ticketid, price, type, artist, date)" +
+                                            " VALUES($1, $2, $3, $4, $5) RETURNING *",
+         [ticketid, price, type, artist, date]);
+         res.json(newTicket.rows[0]);
+    } catch (error) {
+        res.json({error: "Duplicate TicketID"});
+        console.log(error.message);
+    }
+})
 
+app.post("/users", async(req, res) => {
+    try {
+        const {userid, firstname, lastname, email, birthday} = req.body;
+        const newUser = await pool.query("INSERT INTO users (userid, firstname, lastname, email, birthday)" +
+                                            " VALUES($1, $2, $3, $4, $5) RETURNING *",
+         [userid, firstname, lastname, email, birthday]);
 
+         res.json(newUser.rows[0]);
+    } catch (error) {
+        res.json({error: "Duplicate UserID"});
+        console.log(error.message);
+    }
+})
+
+app.get("/tickets", async (req, res) => {
+    try {
+        const allTickets = await pool.query("SELECT * FROM tickets ORDER BY ticketid ASC");
+        res.json(allTickets.rows)
+    } catch (err) {
+        console.error(err.message)
+    }
+})
+
+app.get("/users", async (req, res) => {
+    try {
+        const allUsers = await pool.query("SELECT * FROM users ORDER BY userid ASC");
+        res.json(allUsers.rows)
+    } catch (err) {
+        console.error(err.message)
+    }
+})
+
+app.get("/purchases", async (req, res) => {
+    try {
+        const allPurchases = await pool.query("SELECT * FROM purchases ORDER BY purchaseid ASC");
+        res.json(allPurchases.rows)
+    } catch (err) {
+        console.error(err.message)
+    }
+})
+
+// DELETE - Remove ticket
+app.delete("/tickets/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query("DELETE FROM tickets WHERE ticketid = $1", [id])
+        res.json({success: "Row Deleted"});
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+// DELETE - Remove users
+app.delete("/users/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query("DELETE FROM users WHERE userid = $1", [id])
+
+        res.json({success: "Row Deleted"});
+    } catch (err) {
+        console.log(err.message)
+    }
+})
 
 app.listen(5000, () => {
     console.log("Server has started on port 5000");
