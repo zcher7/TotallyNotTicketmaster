@@ -10,8 +10,8 @@ CREATE TABLE tickets(
 
 CREATE TABLE users(
     userid SERIAL PRIMARY KEY,
-    firstName VARCHAR(30),
-    lastName VARCHAR(30),
+    firstname VARCHAR(30),
+    lastname VARCHAR(30),
     email VARCHAR(50) UNIQUE,
     birthday DATE
 );
