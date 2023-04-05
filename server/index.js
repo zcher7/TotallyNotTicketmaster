@@ -156,7 +156,7 @@ app.post("/users", async(req, res) => {
 
          res.json(newUser.rows[0]);
     } catch (error) {
-        res.json({error: "Duplicate UserID"});
+        res.json({error: "Duplicate UserID/Email"});
         console.log(error.message);
     }
 })
